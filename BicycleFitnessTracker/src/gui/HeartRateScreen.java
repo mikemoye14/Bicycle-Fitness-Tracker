@@ -4,6 +4,14 @@ package gui;
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+import java.util.Timer;
+import bike.User;
+import java.io.IOException;
+import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -11,11 +19,21 @@ package gui;
  */
 public class HeartRateScreen extends javax.swing.JPanel {
 
+    private int hr = 0;
+    private boolean stop = false;
+    
+    public static void setHeartRates(){
+        jLabel11.setText((int) User.getTargetHeartRate() + " - " + (int) User.getMaxHeartRate());
+    }
+
     /**
      * Creates new form HeartRateScreen
      */
     public HeartRateScreen() {
         initComponents();
+        jLabel8.setOpaque(true);
+        jLabel9.setOpaque(true);      
+        
     }
 
     /**
@@ -31,6 +49,12 @@ public class HeartRateScreen extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
@@ -38,28 +62,286 @@ public class HeartRateScreen extends javax.swing.JPanel {
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/bike.png"))); // NOI18N
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(85, 25, -1, -1));
+        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 36)); // NOI18N
-        jLabel3.setText("072");
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, -1, -1));
+        jLabel3.setText("000");
+        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel4.setText("BPM");
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 210, -1, -1));
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabel5.setText("98 - 166");
         add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 290, -1, -1));
 
+        jLabel6.setText("Target Range:");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 250, -1, -1));
+
+        jLabel8.setBackground(new java.awt.Color(255, 0, 0));
+        jLabel8.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("STOP");
+        jLabel8.setToolTipText("");
+        jLabel8.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel8MousePressed(evt);
+            }
+        });
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 350, 100, 50));
+
+        jLabel9.setBackground(new java.awt.Color(51, 204, 0));
+        jLabel9.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel9.setText("START");
+        jLabel9.setToolTipText("");
+        jLabel9.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jLabel9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel9MousePressed(evt);
+            }
+        });
+        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, 100, 50));
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 280, -1, -1));
+
+        jLabel10.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/emptyHeart.png"))); // NOI18N
+        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, -1, -1));
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 280, 70, 20));
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/heartRateCircle.png"))); // NOI18N
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 142, -1, -1));
+        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void doHrAtRest() {
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    hr += 5;
+
+                    if (hr <= 80) {
+                        jLabel10.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/images/halfHeart.png"))));
+                        if (hr < 10) {
+                            jLabel3.setText("00" + hr);
+                        } else if (hr < 100) {
+                            jLabel3.setText("0" + hr);
+                        } else {
+                            jLabel3.setText(String.valueOf(hr));
+                        }
+                    } else {
+                        cancel();
+                        doHrToThr();
+                    }
+                } catch (Exception x) {
+                }
+            }
+        }, 500, 100);
+    }
+
+    private void doHrToThr() {
+        Timer iTimer = new Timer();
+        iTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                hr += 5;
+
+                if (hr >= 80 && hr <= User.getTargetHeartRate()) {
+                    if (hr < 100) {
+                        jLabel3.setText("0" + hr);
+                    } else {
+                        jLabel3.setText(String.valueOf(hr));
+                    }
+                } else {
+                    cancel();
+                    doHrActive();
+
+                }
+            }
+        }, 500, 100);
+    }
+
+    private void doHrActive() {
+        Timer xTimer = new Timer();
+        xTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                hr += 2;
+
+                if (hr >= User.getTargetHeartRate() && hr <= (User.getMaxHeartRate() * .75)) {
+                    try {
+                        jLabel10.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/images/fullHeart.png"))));
+                    } catch (IOException ex) {
+                        Logger.getLogger(HeartRateScreen.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    if (hr < 100) {
+                        jLabel3.setText("0" + hr);
+                    } else {
+                        jLabel3.setText(String.valueOf(hr));
+                    }
+                } else {
+                    cancel();
+                    sustainHr();
+                }
+            }
+        }, 500, 100);
+    }
+
+    private void sustainHr() {
+        Timer xTimer = new Timer();
+        xTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+
+                if (!stop) {
+                    hr++;
+                    if (hr < 100) {
+                        jLabel3.setText("0" + hr);
+                    } else {
+                        jLabel3.setText(String.valueOf(hr));
+                    }
+                } else {
+
+                    cancel();
+
+                }
+            }
+        }, 500, 900);
+
+        xTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+
+                if (!stop) {
+
+                    if (hr <= User.getTargetHeartRate()) {
+                        try {
+                            jLabel10.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/images/halfHeart.png"))));
+                        } catch (IOException ex) {
+                            Logger.getLogger(HeartRateScreen.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    hr--;
+                    if (hr < 100) {
+                        jLabel3.setText("0" + hr);
+                    } else {
+                        jLabel3.setText(String.valueOf(hr));
+                    }
+                } else {
+
+                    cancel();
+
+                }
+            }
+        }, 500, 1000);
+    }
+
+    private void relaxHr() {
+        Timer oTimer = new Timer();
+        oTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                hr -= 1;
+
+                if (hr <= User.getTargetHeartRate()) {
+                    try {
+                        jLabel10.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/images/halfHeart.png"))));
+                    } catch (IOException ex) {
+                        Logger.getLogger(HeartRateScreen.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+                if (hr > -1) {
+                    if (hr < 10) {
+                        jLabel3.setText("00" + hr);
+                    } else if (hr < 100) {
+                        jLabel3.setText("0" + hr);
+                    } else {
+                        jLabel3.setText(String.valueOf(hr));
+                    }
+                } else {
+                    try {
+                        jLabel10.setIcon(new ImageIcon(ImageIO.read(getClass().getResource("/resources/images/emptyHeart.png"))));
+                    } catch (IOException ex) {
+                        Logger.getLogger(HeartRateScreen.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    cancel();
+                }
+            }
+        }, 500, 50);
+    }
+
+    private void jLabel9MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel9MousePressed
+        stop = false;
+
+        jLabel11.setText((int) User.getTargetHeartRate() + " - " + (int) User.getMaxHeartRate());
+
+        doHrAtRest();
+
+        /*
+         try {
+         Thread rest = new Thread(doHrAtRest());
+         Thread thr = new Thread(doHrToThr());
+         Thread active = new Thread(doHrActive());
+
+         rest.start();
+         rest.join();
+         thr.start();
+         thr.join();
+         active.start();
+         active.join();
+            
+         rest.interrupt();
+         thr.interrupt();
+         active.interrupt();
+        
+         } catch (InterruptedException ex) {
+         Logger.getLogger(HeartRateScreen.class.getName()).log(Level.SEVERE, null, ex);
+         }finally{
+            
+         timer.scheduleAtFixedRate(new TimerTask() {
+         @Override
+         public void run() {
+         hr++;
+                
+         if (hr >= (User.getMaxHeartRate())) {
+         if (hr < 100) {
+         jLabel3.setText("0" + hr);
+         } else {
+         jLabel3.setText(String.valueOf(hr));
+         }
+         }
+         }
+         }, 000, 1000);
+                    
+         }
+         */
+    }//GEN-LAST:event_jLabel9MousePressed
+
+    private void jLabel8MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MousePressed
+        stop = true;
+
+        relaxHr();
+    }//GEN-LAST:event_jLabel8MousePressed
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private static javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }

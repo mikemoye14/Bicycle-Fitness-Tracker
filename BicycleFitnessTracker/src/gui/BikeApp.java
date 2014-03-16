@@ -1,28 +1,65 @@
-package gui;
-
-
-import javax.swing.ImageIcon;
-
 /*
- * To change this template, choose Tools | Templates
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package gui;
+
+import bike.HeartRates;
+import bike.User;
+import java.awt.HeadlessException;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.text.AbstractDocument;
 
 /**
  *
- * @author MTM5313
+ * @author dizoo548
  */
 public class BikeApp extends javax.swing.JFrame {
+
+    private static StartScreen startScreen;
+    private static MainMenu mainMenu;
+    private static HeartRateScreen hrScreen;
 
     /**
      * Creates new form BikeApp
      */
     public BikeApp() {
+
         initComponents();
+        
         this.setLocationRelativeTo(null);
         this.setIconImage(new ImageIcon(getClass().getResource("/resources/images/bike.png")).getImage());
-    }
 
+        startScreen = new gui.StartScreen();
+        mainMenu = new MainMenu();
+        hrScreen = new HeartRateScreen();
+        
+        getContentPane().add(startScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 410));
+        getContentPane().add(mainMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 410));
+        getContentPane().add(hrScreen, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 410));
+        
+        mainMenu.setVisible(false);
+        hrScreen.setVisible(false);
+        
+    }
+    
+    public static boolean startScreen(boolean v){
+        startScreen.setVisible(v);
+        return startScreen.isVisible();
+    }
+    public static boolean mainMenu(boolean v){
+        mainMenu.setVisible(v);
+        return  mainMenu.isVisible();
+    }
+    public static boolean hrScreen(boolean v){
+        hrScreen.setVisible(v);
+        return hrScreen.isVisible();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,28 +69,114 @@ public class BikeApp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mainMenu2 = new MainMenu();
-        mainMenu1 = new MainMenu();
-        startScreenPanel1 = new StartScreenPanel();
-        startScreenPanel2 = new StartScreenPanel();
-        mainMenu3 = new MainMenu();
-        heartRateScreen2 = new HeartRateScreen();
-        startScreenPanel3 = new StartScreenPanel();
-        startScreenPanel4 = new StartScreenPanel();
-        mainMenu4 = new MainMenu();
-        heartRateScreen1 = new HeartRateScreen();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Bicyle Fitness Tracker");
-        setResizable(false);
+        setBackground(new java.awt.Color(255, 255, 255));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(startScreenPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 400));
-        getContentPane().add(startScreenPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-        getContentPane().add(mainMenu4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
-        getContentPane().add(heartRateScreen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 300, 400));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/backButton.png"))); // NOI18N
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel1MousePressed(evt);
+            }
+        });
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 410, 100, 30));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/homeButton.png"))); // NOI18N
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel2MousePressed(evt);
+            }
+        });
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 410, 100, 30));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/images/menuButton.png"))); // NOI18N
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jLabel3MousePressed(evt);
+            }
+        });
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 410, 100, 30));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
+       
+        if (mainMenu.isVisible()) {
+            mainMenu.setVisible(false);
+            startScreen.setVisible(true);
+        }
+
+        if (hrScreen.isVisible()) {
+            hrScreen.setVisible(false);
+            mainMenu.setVisible(true);
+        }
+
+    }//GEN-LAST:event_jLabel1MousePressed
+
+    private void jLabel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MousePressed
+        try {
+            java.net.URL imgURL = getClass().getResource("/resources/images/gear.png");
+
+            Icon icon = new ImageIcon(imgURL);
+
+            String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+            String[] days = new String[31];
+
+            for (int i = 0; i < 31; i++) {
+                days[i] = String.valueOf(i + 1);
+            }
+            JTextField fName = new JTextField(User.getFName());
+            JTextField lName = new JTextField(User.getLName());
+            JTextField year = new JTextField((String.valueOf(User.getBirthYear())));
+
+            AbstractDocument doc = (AbstractDocument) year.getDocument();
+            doc.setDocumentFilter(new MaximumSizeFilter(0, 4));
+
+            JComboBox month = new JComboBox(months);
+            month.setSelectedIndex(User.getBirthMonth() - 1);
+            JComboBox day = new JComboBox(days);
+            day.setSelectedIndex(User.getBirthDay() - 1);
+
+            Object[] stuff = {"Enter your First Name:", fName, "Enter your Last Name:", lName, "Enter your birthdate: ", month, day, year};
+            int response;
+            response = JOptionPane.showConfirmDialog(this, stuff, "Settings", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, icon);
+
+            if (response == JOptionPane.CANCEL_OPTION) {
+            } else {
+
+                HeartRates hr = new HeartRates();
+
+                User.setBirthMonth((month.getSelectedIndex() + 1));
+                User.setBirthDay((day.getSelectedIndex() + 1));
+                User.setBirthYear(Integer.parseInt(year.getText()));
+
+                int confirm = JOptionPane.showConfirmDialog(this, "Your name is: " + fName.getText() + " " + lName.getText() + "\n and your current age is: " + hr.calcAge((month.getSelectedIndex() + 1), (day.getSelectedIndex() + 1), Integer.parseInt(year.getText())) + " ?");
+
+                if (confirm == JOptionPane.CANCEL_OPTION) {
+                } else {
+                    User.setFName(fName.getText());
+                    User.setLName(lName.getText());
+                    User.setTargetHeartRate();
+                    User.setMaxHeartRate();
+                    
+                    HeartRateScreen.setHeartRates();
+                }
+            }
+        } catch (HeadlessException | NumberFormatException x) {
+            //x.printStackTrace();
+        }
+    }//GEN-LAST:event_jLabel3MousePressed
+
+    private void jLabel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel2MousePressed
+            startScreen.setVisible(true);
+            hrScreen.setVisible(false);
+            mainMenu.setVisible(false);
+    }//GEN-LAST:event_jLabel2MousePressed
 
     /**
      * @param args the command line arguments
@@ -86,19 +209,14 @@ public class BikeApp extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new BikeApp().setVisible(true);
+
             }
         });
     }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private HeartRateScreen heartRateScreen1;
-    private HeartRateScreen heartRateScreen2;
-    private MainMenu mainMenu1;
-    private MainMenu mainMenu2;
-    private MainMenu mainMenu3;
-    private MainMenu mainMenu4;
-    private StartScreenPanel startScreenPanel1;
-    private StartScreenPanel startScreenPanel2;
-    private StartScreenPanel startScreenPanel3;
-    private StartScreenPanel startScreenPanel4;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }
