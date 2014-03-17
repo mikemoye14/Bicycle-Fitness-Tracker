@@ -1,14 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package gui;
 
 /**
+ * CMPSC 221 
+ * BicycleFitnessTracker 
+ * DistanceScreen.java 
+ * Purpose: creates distance panel
+ * 
+ * @author Mike Moye
+ * @version 1.0 17 March 2014
  *
- * @author dizoo548
  */
 public class DistanceScreen extends javax.swing.JPanel {
 

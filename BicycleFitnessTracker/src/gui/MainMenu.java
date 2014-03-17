@@ -1,21 +1,18 @@
 package gui;
 
-import bike.User;
 import java.awt.Color;
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
+ * CMPSC 221 
+ * BicycleFitnessTracker 
+ * MainMenu.java 
+ * Purpose: creates main menu panel
+ * 
+ * @author Mike Moye
+ * @version 1.0 17 March 2014
  *
- * @author MTM5313
  */
 public class MainMenu extends javax.swing.JPanel {
-
-    private static boolean isActive;
 
     /**
      * Creates new form MainMenu
@@ -126,14 +123,6 @@ public class MainMenu extends javax.swing.JPanel {
                 .addGap(18, 18, 18))
         );
     }// </editor-fold>//GEN-END:initComponents
-
-    public static void setStatus(boolean status) {
-        MainMenu.isActive = status;
-    }
-
-    public static boolean getStatus() {
-        return MainMenu.isActive;
-    }
 
     private void jPanel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel3MousePressed
         this.setVisible(false);

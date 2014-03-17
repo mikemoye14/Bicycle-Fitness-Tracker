@@ -7,13 +7,15 @@ import java.awt.HeadlessException;
 import javax.swing.*;
 import javax.swing.text.*;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
- *
+ * CMPSC 221 
+ * BicycleFitnessTracker 
+ * StartScreen.java 
+ * Purpose: creates the start screen panel
+ * 
  * @author Mike Moye
+ * @version 1.0 17 March 2014
+ *
  */
 public class StartScreen extends javax.swing.JPanel {
 
@@ -26,11 +28,19 @@ public class StartScreen extends javax.swing.JPanel {
         initComponents();
         this.user = new User();
     }
-
+    
+    /**
+     * Method setUser sets user
+     * @param user user
+     */
     public void setUser(User user) {
         this.user = user;
     }
-
+    
+    /**
+     * Method getUser gets user
+     * @return this.user user
+     */
     public User getUser() {
         return this.user;
     }
@@ -130,7 +140,6 @@ public class StartScreen extends javax.swing.JPanel {
     }//GEN-LAST:event_jPanel1MouseExited
 
     private void jPanel2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MousePressed
-
         try {
             java.net.URL imgURL = getClass().getResource("/resources/images/gear.png");
 
@@ -200,7 +209,6 @@ public class StartScreen extends javax.swing.JPanel {
 }
 
 class MaximumSizeFilter extends DocumentFilter {
-
     private final int maxRows;
     private final int maxCols;
 

@@ -1,9 +1,6 @@
 package gui;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 import java.util.Timer;
 import bike.User;
 import java.io.IOException;
@@ -14,17 +11,18 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
+ * CMPSC 221 
+ * BicycleFitnessTracker 
+ * HeatRateScreen.java 
+ * Purpose: creates heart rate panel
+ * 
+ * @author Mike Moye
+ * @version 1.0 17 March 2014
  *
- * @author MTM5313
  */
 public class HeartRateScreen extends javax.swing.JPanel {
-
     private int hr = 0;
-    private boolean stop = false;
-    
-    public static void setHeartRates(){
-        jLabel11.setText((int) User.getTargetHeartRate() + " - " + (int) User.getMaxHeartRate());
-    }
+    private boolean stop = false;  
 
     /**
      * Creates new form HeartRateScreen
@@ -34,6 +32,13 @@ public class HeartRateScreen extends javax.swing.JPanel {
         jLabel8.setOpaque(true);
         jLabel9.setOpaque(true);      
         
+    }
+    
+    /**
+     * Method setHeartRate
+     */
+    public static void setHeartRates(){
+        jLabel11.setText((int) User.getTargetHeartRate() + " - " + (int) User.getMaxHeartRate());
     }
 
     /**

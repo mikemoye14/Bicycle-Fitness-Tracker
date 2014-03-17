@@ -1,23 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import bike.HeartRates;
 import bike.User;
 import java.awt.HeadlessException;
-import javax.swing.Icon;
-import javax.swing.ImageIcon;
-import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.text.AbstractDocument;
+import javax.swing.*;
 
 /**
+ * CMPSC 221 
+ * BicycleFitnessTracker 
+ * BikeApp.java 
+ * Purpose: Runs the application
+ * 
+ * @author Mike Moye
+ * @version 1.0 17 March 2014
  *
- * @author dizoo548
  */
 public class BikeApp extends javax.swing.JFrame {
 
@@ -29,9 +26,14 @@ public class BikeApp extends javax.swing.JFrame {
      * Creates new form BikeApp
      */
     public BikeApp() {
-
         initComponents();
-        
+        setBikeApp();       
+    }
+    
+    /**
+     * Setup the application
+     */
+    private void setBikeApp(){
         this.setLocationRelativeTo(null);
         this.setIconImage(new ImageIcon(getClass().getResource("/resources/images/bike.png")).getImage());
 
@@ -45,21 +47,36 @@ public class BikeApp extends javax.swing.JFrame {
         
         mainMenu.setVisible(false);
         hrScreen.setVisible(false);
-        
     }
     
+    /**
+     * Method startScreen sets the visibility if the start screen
+     * @param v visibility
+     * @return startScreen.isVisible() current visibility
+     */
     public static boolean startScreen(boolean v){
         startScreen.setVisible(v);
         return startScreen.isVisible();
     }
+    /**
+     * Method mainMenu sets the visibility if the main menu
+     * @param v visibility
+     * @return mainMenu.isVisible() current visibility
+     */
     public static boolean mainMenu(boolean v){
         mainMenu.setVisible(v);
         return  mainMenu.isVisible();
     }
+    /**
+     * Method hrScreen sets the visibility if the main menu
+     * @param v visibility
+     * @return hrScreen.isVisible() current visibility
+     */
     public static boolean hrScreen(boolean v){
         hrScreen.setVisible(v);
         return hrScreen.isVisible();
     }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -105,17 +122,14 @@ public class BikeApp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jLabel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MousePressed
-       
-        if (mainMenu.isVisible()) {
+       if (mainMenu.isVisible()) {
             mainMenu.setVisible(false);
             startScreen.setVisible(true);
         }
-
         if (hrScreen.isVisible()) {
             hrScreen.setVisible(false);
             mainMenu.setVisible(true);
         }
-
     }//GEN-LAST:event_jLabel1MousePressed
 
     private void jLabel3MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MousePressed
@@ -179,6 +193,7 @@ public class BikeApp extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel2MousePressed
 
     /**
+     * The main method
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -209,7 +224,6 @@ public class BikeApp extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new BikeApp().setVisible(true);
-
             }
         });
     }
